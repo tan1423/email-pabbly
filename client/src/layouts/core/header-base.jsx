@@ -105,7 +105,7 @@ export function HeaderBase({
                   <Box
                     alt="logo"
                     component="img"
-                    src={`${CONFIG.site.basePath}/assets/icons/navbar/PEV_logo.svg`}
+                    src="/logo/Pabbly SVG.svg"
                     width={120}
                     sx={{
                       display: { xs: 'none', sm: 'block' },
@@ -113,6 +113,7 @@ export function HeaderBase({
                     }}
                   />
                 </Link>
+
                 <Logo
                   width={30}
                   sx={{

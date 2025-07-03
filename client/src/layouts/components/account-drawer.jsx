@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
@@ -12,7 +12,6 @@ import IconButton from '@mui/material/IconButton';
 import { paths } from 'src/routes/paths';
 import { useRouter, usePathname } from 'src/routes/hooks';
 
-// import { _mock } from 'src/_mock';
 import { varAlpha } from 'src/theme/styles';
 
 import { Label } from 'src/components/label';
@@ -27,14 +26,19 @@ import { SignOutButton } from './sign-out-button';
 
 export function AccountDrawer({ data = [], sx, ...other }) {
   const theme = useTheme();
-
   const router = useRouter();
-
   const pathname = usePathname();
 
   const { user } = useSelector((state) => state.user);
+  const [userData, setUserData] = useState({});
 
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const dataAns = JSON.parse(localStorage.getItem('user'));
+    console.log('User from localStorage:', dataAns);
+    setUserData(dataAns || {}); // prevent setting null
+  }, []);
 
   const handleOpenDrawer = useCallback(() => {
     setOpen(true);
@@ -56,7 +60,6 @@ export function AccountDrawer({ data = [], sx, ...other }) {
     <AnimateAvatar
       width={96}
       slotProps={{
-        // avatar: { src: _mock.image.avatar(24), alt: user?.displayName },
         overlay: {
           border: 2,
           spacing: 3,
@@ -64,7 +67,7 @@ export function AccountDrawer({ data = [], sx, ...other }) {
         },
       }}
     >
-      {user?.displayName?.charAt(0).toUpperCase()}
+      {user?.displayName?.charAt(0).toUpperCase() || userData?.first_name?.charAt(0)?.toUpperCase()}
     </AnimateAvatar>
   );
 
@@ -73,8 +76,7 @@ export function AccountDrawer({ data = [], sx, ...other }) {
       <AccountButton
         open={open}
         onClick={handleOpenDrawer}
-        // photoURL={_mock.image.avatar(24)}
-        displayName={user?.displayName}
+        displayName={user?.displayName || `${userData?.first_name} ${userData?.last_name}`}
         sx={sx}
         {...other}
       />
@@ -98,11 +100,11 @@ export function AccountDrawer({ data = [], sx, ...other }) {
             {renderAvatar}
 
             <Typography variant="subtitle1" noWrap sx={{ mt: 2 }}>
-              {user?.displayName}
+              {userData?.first_name} {userData?.last_name}
             </Typography>
 
             <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }} noWrap>
-              {user?.email}
+              {userData?.email}
             </Typography>
           </Stack>
 
@@ -116,7 +118,6 @@ export function AccountDrawer({ data = [], sx, ...other }) {
           >
             {data.map((option) => {
               const rootLabel = pathname.includes('/app') ? 'Dashboard' : 'Dashboard';
-
               const rootHref = pathname.includes('/app') ? '/' : paths.dashboard.root;
 
               return (
