@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTheme } from '@emotion/react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   Box,
@@ -18,6 +18,7 @@ import {
   DialogActions,
 } from '@mui/material';
 
+import { downloadList } from 'src/redux/slice/listSlice';
 import { DashboardContent } from 'src/layouts/dashboard';
 import { listItems } from 'src/_mock/big-card/_reportsBigCardListItems';
 
@@ -27,7 +28,6 @@ import StatsCards from 'src/components/stats-card/stats-card';
 import PageHeader from 'src/components/page-header/page-header';
 
 import { ReportsBarChart } from 'src/sections/reports/component/chart-view/reports-bar-chart';
-import { downloadList } from 'src/redux/slice/listSlice';
 // ----------------------------------------------------------------------
 
 const metadata = { title: `Reports | Pabbly Email Verification` };

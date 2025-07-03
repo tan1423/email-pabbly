@@ -1,5 +1,5 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
@@ -24,9 +24,17 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useSetState } from 'src/hooks/use-set-state';
 
 import { fIsBetween } from 'src/utils/format-time-util';
+import { convertToTimezone } from 'src/utils/date-utils';
 
 import { varAlpha } from 'src/theme/styles';
 import { DASHBOARD_STATUS_OPTIONS } from 'src/_mock/_table/_dashboard';
+import {
+  deleteList,
+  fetchLists,
+  pollJobStatus,
+  fetchChartValues,
+  startBulkVerification,
+} from 'src/redux/slice/listSlice';
 
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
@@ -43,14 +51,6 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { convertToTimezone } from 'src/utils/date-utils';
-import {
-  deleteList,
-  fetchLists,
-  pollJobStatus,
-  fetchChartValues,
-  startBulkVerification,
-} from 'src/redux/slice/listSlice';
 import { DashboardTableRow } from './dashboard-table-row';
 import { DashboardTableToolbar } from './dashboard-table-toolbar';
 import { DashboardTableFiltersResult } from './dashboard-table-filters-result';
@@ -119,11 +119,13 @@ export function DashboardTable() {
       id: index,
     }))
   );
+
   useEffect(() => {
     if (listData?.listData) {
       setTableData(transformData(listData?.listData, selectedTimeZone));
     }
   }, [listData, selectedTimeZone]);
+
   const handleStartVerification = (row) => {
     dispatch(startBulkVerification(row.jobId));
     dispatch(pollJobStatus({ jobId: row.jobId }));
@@ -159,6 +161,7 @@ export function DashboardTable() {
     },
     [filters, table]
   );
+
   const isStartVerification = useSelector((state) => state.fileUpload.isStartVerification);
   const isVerificationCompleted = useSelector((state) => state.fileUpload.isVerificationCompleted);
   const [processingRowId, setProcessingRowId] = useState(null);
@@ -190,7 +193,6 @@ export function DashboardTable() {
     message: '',
     severity: 'success',
   });
-
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') return;
     setSnackbarState((prev) => ({ ...prev, open: false }));
@@ -252,6 +254,7 @@ export function DashboardTable() {
       );
     }
   }, [dispatch, selected, page, rowsPerPage, searchValue, filters.state.status]);
+
   return (
     <Card>
       <CardHeader

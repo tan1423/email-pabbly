@@ -1,6 +1,8 @@
-import { useTheme } from '@emotion/react';
-import React, { useRef, useMemo, useState, useEffect } from 'react';
 import debounce from 'lodash/debounce';
+import { useTheme } from '@emotion/react';
+import { useDispatch, useSelector } from 'react-redux';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
+
 import { LoadingButton } from '@mui/lab';
 import {
   Box,
@@ -19,9 +21,9 @@ import {
   FormHelperText,
 } from '@mui/material';
 
-import { Iconify } from 'src/components/iconify';
-import { useDispatch, useSelector } from 'react-redux';
 import { saveTimeZone, fetchTimeZones, setSelectedTimeZone } from 'src/redux/slice/timeZoneSlice';
+
+import { Iconify } from 'src/components/iconify';
 
 export default function TimeZonePage() {
   const [searchTerm, setSearchTerm] = useState('');

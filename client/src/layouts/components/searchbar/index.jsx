@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect, useCallback } from 'react';
+
 import Box from '@mui/material/Box';
 import SvgIcon from '@mui/material/SvgIcon';
 import { useTheme } from '@mui/material/styles';
@@ -16,10 +17,12 @@ import {
 } from '@mui/material';
 
 import { varAlpha } from 'src/theme/styles';
+import { clearSearch, searchLists, setSearchQuery } from 'src/redux/slice/listSlice';
+
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 import { SearchNotFound } from 'src/components/search-not-found';
-import { clearSearch, searchLists, setSearchQuery } from 'src/redux/slice/listSlice';
+
 import { ResultItem } from './result-item';
 
 export default function Searchbar({ sx, ...other }) {

@@ -76,20 +76,23 @@ export const endpoints = {
     logout: '/auth/logout',
   },
   list: {
-    verifySingle: "lists/validate-single",
-    startBulkVerification: "lists/validate-bulk",
-    getStatus: "lists/get-status",
-    upload: "/lists",
-    get: "/lists",
-    delete: "/lists",
-    chart: "/lists/stats",
-    download: "/lists/download"
+    verifySingle: 'lists/validate-single',
+    startBulkVerification: 'lists/validate-bulk',
+    getStatus: 'lists/get-status',
+    upload: '/lists',
+    get: '/lists',
+    delete: '/lists',
+    chart: '/lists/stats',
+    download: '/lists/download',
   },
   credit: {
-    getBalance: "credit/balance",
-    getHistory: "credit/history"
+    getBalance: 'credit/balance',
+    getHistory: 'credit/history',
+  },
+  timeZone: {
+    get: '/time-zone/',
+    save: '/time-zone/',
   },
 };
-
 
 // ... other endpoints};

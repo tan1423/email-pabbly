@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import axios, { endpoints } from 'src/utils/axios-util';
+
 import { setSelectedTimeZone } from './timeZoneSlice';
 
 // Initial state

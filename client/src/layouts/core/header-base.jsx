@@ -8,7 +8,6 @@ import { styled, useTheme } from '@mui/material/styles';
 
 import { paths } from 'src/routes/paths';
 
-import { CONFIG } from 'src/config-global';
 import { varAlpha } from 'src/theme/styles';
 
 import { Logo } from 'src/components/logo';

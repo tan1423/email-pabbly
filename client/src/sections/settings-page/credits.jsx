@@ -4,7 +4,9 @@ import { Helmet } from 'react-helmet-async';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Box, useMediaQuery } from '@mui/material';
+
 import { fetchCreditBalance } from 'src/redux/slice/creditSlice';
+
 import StatsCards from 'src/components/stats-card/stats-card';
 
 import { CreditTable } from '../credit-table/credit-table';
@@ -16,12 +18,20 @@ export default function ThreePage() {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const dispatch = useDispatch();
   const { totalCredits, usedCredits, remainingCredits } = useSelector((state) => state.credits);
+  const { user, status } = useSelector((state) => state.user);
 
+  
   useEffect(() => {
-    if (!totalCredits) {
-      dispatch(fetchCreditBalance());
-    }
-  }, [totalCredits, dispatch]);
+  if (
+    user && 
+    user.emailVerified && 
+    !totalCredits && 
+    status === 'succeeded' // or 'authenticated' based on your logic
+  ) {
+    dispatch(fetchCreditBalance());
+  }
+}, [user, totalCredits, dispatch, status]);
+
   const stats = {
     allotted: totalCredits || 0,
     consumed: usedCredits || 0,

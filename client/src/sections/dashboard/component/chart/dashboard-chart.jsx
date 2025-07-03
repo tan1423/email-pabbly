@@ -21,11 +21,12 @@ import {
 
 import { fNumber } from 'src/utils/format-number-util';
 
+import { fetchChartValues } from 'src/redux/slice/listSlice';
+
 import { Iconify } from 'src/components/iconify';
 import { Chart, useChart, ChartLegends } from 'src/components/chart';
 import ProgessLinear from 'src/components/progress-bar/progessLinear';
 
-import { fetchChartValues } from 'src/redux/slice/listSlice';
 import ChartAlert from './chart-alert';
 
 // ----------------------------------------------------------------------

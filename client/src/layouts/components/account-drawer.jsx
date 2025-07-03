@@ -1,5 +1,5 @@
-import { useState, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useState, useEffect, useCallback} from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -36,7 +36,6 @@ export function AccountDrawer({ data = [], sx, ...other }) {
 
   useEffect(() => {
     const dataAns = JSON.parse(localStorage.getItem('user'));
-    console.log('User from localStorage:', dataAns);
     setUserData(dataAns || {}); // prevent setting null
   }, []);
 

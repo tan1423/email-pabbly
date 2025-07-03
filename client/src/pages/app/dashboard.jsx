@@ -1,12 +1,16 @@
 /* eslint-disable consistent-return */
-import { useRef, useState, useEffect } from 'react';
 import { useTheme } from '@emotion/react';
 import { Helmet } from 'react-helmet-async';
+import { useRef, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Box, Alert, Button, Tooltip, Snackbar, useMediaQuery } from '@mui/material';
 
+import axios, { endpoints } from 'src/utils/axios-util';
+
 import { DashboardContent } from 'src/layouts/dashboard';
 import { listItems } from 'src/_mock/big-card/_dashboardBigCardListItems';
+import { deductCredit, fetchCreditBalance } from 'src/redux/slice/creditSlice';
 
 import { Iconify } from 'src/components/iconify';
 import BigCard from 'src/components/big-card/big-card';
@@ -17,9 +21,6 @@ import Upload from 'src/sections/dashboard/component/upload/upload-file';
 import { DashboardTable } from 'src/sections/dashboard/component/table/dashboard-table';
 import { DashboardChart } from 'src/sections/dashboard/component/chart/dashboard-chart';
 import VerifySingleEmail from 'src/sections/dashboard/component/verify-single-email/verify-single-email';
-import axios, { endpoints } from 'src/utils/axios-util';
-import { useDispatch, useSelector } from 'react-redux';
-import { deductCredit, fetchCreditBalance } from 'src/redux/slice/creditSlice';
 
 // ----------------------------------------------------------------------
 

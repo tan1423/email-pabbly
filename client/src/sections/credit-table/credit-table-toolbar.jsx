@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTheme } from '@emotion/react';
+import { useDispatch } from 'react-redux';
 
 import {
   Box,
@@ -18,7 +19,6 @@ import {
 } from '@mui/material';
 
 import { Iconify } from 'src/components/iconify';
-import { useDispatch } from 'react-redux';
 
 export function CreditTableToolbar({
   filters,

@@ -1,15 +1,12 @@
 import moment from 'moment-timezone';
 
-// Convert date to user's timezone safely
+// Convert date to user's timezone
 export const convertToTimezone = (dateString, timezone) => {
-  if (!dateString || !timezone || !timezone.key) {
-    return 'Invalid Date';
-  }
+    if (!dateString) return 'Invalid date';
 
-  const momentDate = moment(dateString);
-  if (!momentDate.isValid()) {
-    return 'Invalid Date';
-  }
+    const key = timezone?.key || 'Asia/Kolkata'; // default to India timezone
+    const m = moment(dateString);
+    if (!m.isValid()) return 'Invalid date';
 
-  return momentDate.tz(timezone.key).format('ddd, MMM D, YYYY, h:mm A');
+    return m.tz(key).format('ddd, MMM D, YYYY, h:mm A');
 };

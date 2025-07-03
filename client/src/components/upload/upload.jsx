@@ -6,6 +6,7 @@ import { Box, IconButton, Typography } from '@mui/material';
 import axiosInstance, { endpoints } from 'src/utils/axios-util';
 
 import { varAlpha } from 'src/theme/styles';
+import { setList } from 'src/redux/slice/listSlice';
 import {
   startUpload,
   resetUpload,
@@ -14,7 +15,6 @@ import {
   setUploadedListId,
 } from 'src/redux/slice/uploadSlice';
 
-import { setList } from 'src/redux/slice/listSlice';
 import { Iconify } from '../iconify';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
