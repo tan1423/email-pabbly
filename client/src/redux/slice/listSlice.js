@@ -12,10 +12,11 @@ export const fetchLists = createAsyncThunk('list/',
       const response = await axiosInstance.get(endpoints.list.get, {
         params
       });
-
+ console.log(response.data)
       return {
         stats: response.data.data.stats,
         data: response.data.data,
+        totalEmailCount: response.data.data.totalEmailCount
       };
     } catch (error) {
       return error.message;
@@ -30,10 +31,11 @@ export const searchLists = createAsyncThunk(
       const response = await axiosInstance.get(endpoints.list.get, {
         params: { search: searchQuery, limit: 100 }
       });
-
+  
       return {
         data: response.data.data,
         stats: response.data.data.stats,
+        totalEmailCount: response.data.data.totalEmailCount
       };
     } catch (error) {
       throw error.message;

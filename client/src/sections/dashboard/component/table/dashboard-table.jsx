@@ -1,5 +1,5 @@
-import { useTheme } from '@emotion/react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTheme } from '@emotion/react';
 import { useState, useEffect, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
@@ -24,17 +24,9 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useSetState } from 'src/hooks/use-set-state';
 
 import { fIsBetween } from 'src/utils/format-time-util';
-import { convertToTimezone } from 'src/utils/date-utils';
 
 import { varAlpha } from 'src/theme/styles';
 import { DASHBOARD_STATUS_OPTIONS } from 'src/_mock/_table/_dashboard';
-import {
-  deleteList,
-  fetchLists,
-  pollJobStatus,
-  fetchChartValues,
-  startBulkVerification,
-} from 'src/redux/slice/listSlice';
 
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
@@ -51,6 +43,14 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { convertToTimezone } from 'src/utils/date-utils';
+import {
+  deleteList,
+  fetchLists,
+  pollJobStatus,
+  fetchChartValues,
+  startBulkVerification,
+} from 'src/redux/slice/listSlice';
 import { DashboardTableRow } from './dashboard-table-row';
 import { DashboardTableToolbar } from './dashboard-table-toolbar';
 import { DashboardTableFiltersResult } from './dashboard-table-filters-result';
@@ -70,7 +70,6 @@ const TABLE_HEAD = [
     whiteSpace: 'nowrap',
     tooltip: 'View list status, name and date of creation here.',
   },
-
   {
     id: 'action',
     label: 'Action',
@@ -78,7 +77,6 @@ const TABLE_HEAD = [
     whiteSpace: 'nowrap',
     tooltip: 'Take actions on the list here.',
   },
-
   {
     id: 'report',
     label: 'Report',
@@ -108,20 +106,31 @@ export function DashboardTable() {
   const listData = useSelector((state) => state.list.data);
   const [selected, setSelected] = useState('all');
   const [page, setPage] = useState(0);
+  const [emailCount, setEmailCount] = useState({
+    completed: 0,
+    failed: 0,
+    processing: 0,
+    unprocessed: 0,
+    all: 0
+  });
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchValue, setSearchValue] = useState('');
   const selectedTimeZone = useSelector((state) => state.timeZone.selectedTimeZone);
 
   const dispatch = useDispatch();
-  const [tableData, setTableData] = useState(
-    listData?.listData?.map((item, index) => ({
-      ...item,
-      id: index,
-    }))
-  );
+  const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
     if (listData?.listData) {
+      const counts = listData.totalEmailCounts || {}; 
+      const totalCount = Object.values(counts).reduce((acc, count) => acc + count, 0);
+      setEmailCount({
+        completed: counts.COMPLETED || 0,
+        failed: counts.FAILED || 0,
+        processing: counts.PROCESSING || 0,
+        unprocessed: counts.UNPROCESSED || 0,
+        all: totalCount || 0
+      });
       setTableData(transformData(listData?.listData, selectedTimeZone));
     }
   }, [listData, selectedTimeZone]);
@@ -165,6 +174,7 @@ export function DashboardTable() {
   const isStartVerification = useSelector((state) => state.fileUpload.isStartVerification);
   const isVerificationCompleted = useSelector((state) => state.fileUpload.isVerificationCompleted);
   const [processingRowId, setProcessingRowId] = useState(null);
+
   useEffect(() => {
     if (isVerificationCompleted && processingRowId !== null) {
       setTableData((prevData) =>
@@ -188,15 +198,18 @@ export function DashboardTable() {
     setAnchorEl(null);
     setSelectedRow(null);
   };
+
   const [snackbarState, setSnackbarState] = useState({
     open: false,
     message: '',
     severity: 'success',
   });
+
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') return;
     setSnackbarState((prev) => ({ ...prev, open: false }));
   };
+
   const theme = useTheme();
 
   const handleConfirmDelete = () => {
@@ -220,10 +233,11 @@ export function DashboardTable() {
       setSnackbarState({
         open: true,
         message: 'Email list not deleted successfully.',
-        severity: 'danger',
+        severity: 'error',
       });
     }
   };
+
   const handleOnClose = () => {
     confirmDelete.onFalse();
     handleClosePopover();
@@ -304,9 +318,7 @@ export function DashboardTable() {
                   'default'
                 }
               >
-                {['completed', 'processing', 'unprocessed'].includes(tab.value)
-                  ? tableData?.filter((user) => user.status === tab.value).length
-                  : tableData?.length}
+                {emailCount[tab.value] || 0}
               </Label>
             }
           />
@@ -326,8 +338,7 @@ export function DashboardTable() {
         />
       )}
       <Box sx={{ position: 'relative' }}>
-        {/* <Scrollbar sx={{ minHeight: 444 }}> */}
-        <Table size={table.dense ? 'small' : 'medium'} sx={{}}>
+        <Table size={table.dense ? 'small' : 'medium'}>
           <TableHeadCustom
             showCheckbox={false}
             order={table.order}
@@ -371,20 +382,19 @@ export function DashboardTable() {
 
             {tableData?.length === 0 ? (
               <TableNoData
-                title="Not Data Found"
+                title="No Data Found"
                 description="No data found in the table"
                 notFound={notFound}
               />
             ) : (
               <TableNoData
-                title="Not Search Found"
+                title="No Search Found"
                 description={`No search found with keyword "${filters.state.name}"`}
                 notFound={notFound}
               />
             )}
           </TableBody>
         </Table>
-        {/* </Scrollbar> */}
       </Box>
       <CustomPopover
         open={Boolean(anchorEl)}
